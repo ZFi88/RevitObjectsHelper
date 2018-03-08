@@ -1,5 +1,5 @@
 ﻿# Revit object helper
-Simple library for for work with Revit objects in ORM style.
+Simple library for work with Revit objects in ORM style.
 
 ## Instalation
 ```
