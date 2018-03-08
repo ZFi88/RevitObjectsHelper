@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>RevitObjectsHelper</id>
+    <version>1.0.0</version>
+    <authors>Zhekov Fedor</authors>
+    <owners>zhekovfi</owners>
+    <projectUrl>https://github.com/ZFi88/RevitObjectsHelper</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Simple library for for work with Revit objects in ORM style</description>
+    <releaseNotes>First version</releaseNotes>
+    <copyright>Copyright 2018 Zhekov Fedor</copyright>
+    <tags>Revit</tags>
+  </metadata>
+  <files>
+	<file src="RevitlObjectsHelper\bin\Release\RevitlObjectsHelper.dll" target="lib"/>
+	<file src="RevitlObjectsHelper\bin\Release\RevitlObjectsHelper.xml" target="lib"/>
+  </files>
+</package>
