@@ -13,7 +13,7 @@
     <tags>Revit</tags>
   </metadata>
   <files>
-	<file src="RevitlObjectsHelper\bin\Release\RevitlObjectsHelper.dll" target="lib"/>
-	<file src="RevitlObjectsHelper\bin\Release\RevitlObjectsHelper.xml" target="lib"/>
+	<file src="RevitObjectsHelper\bin\Release\RevitObjectsHelper.dll" target="lib"/>
+	<file src="RevitObjectsHelper\bin\Release\RevitObjectsHelper.xml" target="lib"/>
   </files>
 </package>
