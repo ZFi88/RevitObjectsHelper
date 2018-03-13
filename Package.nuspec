@@ -2,13 +2,13 @@
 <package >
   <metadata>
     <id>RevitObjectsHelper</id>
-    <version>1.0.0</version>
+    <version>1.1.1</version>
     <authors>Zhekov Fedor</authors>
     <owners>zhekovfi</owners>
     <projectUrl>https://github.com/ZFi88/RevitObjectsHelper</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>Simple library for for work with Revit objects in ORM style</description>
-    <releaseNotes>First version</releaseNotes>
+    <description>Simple library for work with Revit objects in ORM style</description>
+    <releaseNotes>Fix creation of context. Added view option to collect elements only from it</releaseNotes>
     <copyright>Copyright 2018 Zhekov Fedor</copyright>
     <tags>Revit</tags>
   </metadata>
