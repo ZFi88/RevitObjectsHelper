@@ -7,20 +7,21 @@ using RevitObjectsHelper.Revit;
 
 namespace RevitObjectsHelper.Core
 {
-/// <summary>
-/// Base class for user wrapper classes, what represents Revit elements
-/// </summary>
+  /// <summary>
+  /// Base class for user wrapper classes, what represents Revit elements
+  /// </summary>
   public abstract class DbObject
   {
-  /// <summary>
-  /// External event for saving changes 
-  /// </summary>
+    /// <summary>
+    /// External event for saving changes 
+    /// </summary>
     private RevitEvent revitEvent;
 
     /// <summary>
     /// Field and property for link to Revit element
     /// </summary>
     private Element revitElement;
+
     public Element RevitElement => revitElement;
 
     /// <summary>
@@ -58,7 +59,8 @@ namespace RevitObjectsHelper.Core
       {
         var parameterName = GetParameterName(info);
         var parameter = RevitElement.LookupParameter(parameterName);
-        if (parameter == null) throw new ParameterNotFoundException($"No such parameter - \"{parameterName}\"");
+        if (parameterName != null && parameter == null)
+          throw new ParameterNotFoundException($"No such parameter - \"{parameterName}\"");
         if (info.PropertyType == typeof(bool))
         {
           info.SetValue(this, parameter.AsInteger() == 1);
@@ -91,7 +93,8 @@ namespace RevitObjectsHelper.Core
       {
         var parameterName = GetParameterName(info);
         var parameter = RevitElement.LookupParameter(parameterName);
-        if (parameter == null) throw new ParameterNotFoundException($"No such parameter - \"{parameterName}\"");
+        if (parameterName != null && parameter == null)
+          throw new ParameterNotFoundException($"No such parameter - \"{parameterName}\"");
         try
         {
           if (info.PropertyType == typeof(bool))
@@ -129,8 +132,9 @@ namespace RevitObjectsHelper.Core
     /// <returns></returns>
     private string GetParameterName(PropertyInfo prop)
     {
-      var attribute = prop?.GetCustomAttributes(typeof(ParameterNameAttribute), false)[0];
-      return ((ParameterNameAttribute) attribute)?.Name;
+      var attributes = prop?.GetCustomAttributes(typeof(ParameterNameAttribute), false);
+      if (attributes.Length > 0) return ((ParameterNameAttribute) attributes[0])?.Name;
+      return null;
     }
 
 

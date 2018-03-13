@@ -15,8 +15,9 @@ namespace RevitObjectsHelper.Core
     /// </summary>
     /// <typeparam name="T">Type of user context class</typeparam>
     /// <param name="doc">Current Revit document</param>
+    /// <param name="view">Current Revit view</param>
     /// <returns></returns>
-    public static T Create<T>(Document doc) where T : DbContext, new()
+    public static T Create<T>(Document doc, View view = null) where T : DbContext, new()
     {
       var type = typeof(T);
       var context = new T();
@@ -24,10 +25,14 @@ namespace RevitObjectsHelper.Core
       if (props.Length > 0)
       {
         var dbSetType = typeof(DbObjectSet<>);
-        foreach (var p in props.Where(p => p.PropertyType == dbSetType))
+        foreach (var p in props)
         {
+          if (!p.PropertyType.Name.Contains("DbObjectSet")) continue;
           var q = p.PropertyType.GetGenericArguments()[0];
-          var instance = Activator.CreateInstance(dbSetType.MakeGenericType(q), doc);
+          var seType = dbSetType.MakeGenericType(q);
+          var instance = view != null
+              ? Activator.CreateInstance(seType, doc, view)
+              : Activator.CreateInstance(seType, doc);
           p.SetValue(context, instance);
         }
       }

@@ -29,22 +29,62 @@ namespace RevitObjectsHelper.Core
     private List<T> objects = new List<T>();
 
     /// <summary>
+    /// Private constructor. Initialize _rEvent object
+    /// </summary>
+    private DbObjectSet()
+    {
+      _rEvent = new RevitEvent();
+    }
+
+    /// <summary>
     /// Constructor. Create new instance of DbObjectSet
     /// </summary>
     /// <param name="doc">Current Revit document</param>
-    public DbObjectSet(Document doc)
+    /// <param name="view">Current view</param>
+    public DbObjectSet(Document doc, View view) : this()
     {
       _doc = doc;
-      _rEvent = new RevitEvent();
+      var col = GetCollector(doc, view);
+      Init(col);
+    }
+
+    /// <summary>
+    /// Constructor. Create new instance of DbObjectSet
+    /// </summary>
+    /// <param name="doc">Current Revit document</param>
+    public DbObjectSet(Document doc) : this()
+    {
+      _doc = doc;
+      var col = GetCollector(doc);
+      Init(col);
+    }
+
+    /// <summary>
+    /// Initialize collector
+    /// </summary>
+    /// <param name="doc">Current Revit document</param>
+    /// <param name="view">Revit view</param>
+    /// <returns>FilteredElementCollector</returns>
+    private FilteredElementCollector GetCollector(Document doc, View view = null)
+    {
       var tempObj = new T();
       var cat = tempObj.Category;
       var type = tempObj.Type;
       var isInstance = tempObj.IsInstance();
-      var col = new FilteredElementCollector(doc);
+      var col = view != null ? new FilteredElementCollector(doc, view.Id) : new FilteredElementCollector(doc);
       if (type != null && type != typeof(Element)) col.OfClass(type);
       if (cat != BuiltInCategory.INVALID) col.OfCategory(cat);
       if (isInstance) col.WhereElementIsNotElementType();
       else col.WhereElementIsElementType();
+      return col;
+    }
+
+    /// <summary>
+    /// Add objects in object list
+    /// </summary>
+    /// <param name="col">Collector of Revit elements</param>
+    private void Init(FilteredElementCollector col)
+    {
       foreach (var element in col.ToElements())
       {
         var obj = InitObject(element);
@@ -61,7 +101,7 @@ namespace RevitObjectsHelper.Core
     {
       var obj = new T();
       var privateProps = obj.GetType().BaseType
-        .GetFields(BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
+          .GetFields(BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
       if (privateProps.Length > 0)
       {
         var elementProp = privateProps.FirstOrDefault(p => p.Name == "revitElement");
@@ -72,8 +112,8 @@ namespace RevitObjectsHelper.Core
       }
 
       var initMethod =
-        obj.GetType().BaseType.GetMethod("Init",
-          BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
+          obj.GetType().BaseType.GetMethod("Init",
+              BindingFlags.NonPublic | BindingFlags.FlattenHierarchy | BindingFlags.Instance);
       if (initMethod != null) initMethod.Invoke(obj, null);
 
       return obj;
