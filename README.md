@@ -13,8 +13,8 @@ PM> Install-Package RevitObjectsHelper
   [Class(typeof(Wall))] //Get only walls, also you can set [Category(BuiltInCategory.Walls)]
   public class MyWall : DbObject
   {
-    [ParameterName("Comments")] //Bind Revit parameter "Comments" to property Comments
-    public String Comments { get; set; }
+    [BuiltInParameter(BuiltInParameter.ALL_MODEL_INSTANCE_COMMENTS)] //Bind Revit builtin parameter "Comments" to property Comments
+    public string Comments { get; set; }
 
     [ParameterName("Length")] //Bind Revit parameter "Length" to property Length
     public double Length { get; set; }
