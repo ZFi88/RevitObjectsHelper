@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RevitObjectsHelper.Exceptions
 {
-  public class SymbolOrInstanceException : Exception
+  public class SymbolOrInstanceException : ObjectHelperException
   {
     public SymbolOrInstanceException(string message) : base(message)
     {

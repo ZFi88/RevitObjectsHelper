@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Autodesk.Revit.DB;
+using RevitObjectsHelper.Exceptions;
 
 namespace RevitObjectsHelper.Core
 {
@@ -25,19 +26,33 @@ namespace RevitObjectsHelper.Core
       if (props.Length > 0)
       {
         var dbSetType = typeof(DbObjectSet<>);
-        foreach (var p in props)
+        try
         {
-          if (!p.PropertyType.Name.Contains("DbObjectSet")) continue;
-          var q = p.PropertyType.GetGenericArguments()[0];
-          var seType = dbSetType.MakeGenericType(q);
-          var instance = view != null
-              ? Activator.CreateInstance(seType, doc, view)
-              : Activator.CreateInstance(seType, doc);
-          p.SetValue(context, instance);
+          foreach (var p in props)
+          {
+            if (!p.PropertyType.Name.Contains("DbObjectSet")) continue;
+            var q = p.PropertyType.GetGenericArguments()[0];
+            var seType = dbSetType.MakeGenericType(q);
+            var instance = view != null
+                ? Activator.CreateInstance(seType, doc, view)
+                : Activator.CreateInstance(seType, doc);
+            p.SetValue(context, instance);
+          }
+        }
+        catch (Exception e)
+        {
+          throw GetHelperException(e) ?? e;
         }
       }
 
       return context;
+    }
+
+    private static Exception GetHelperException(Exception e)
+    {
+      if (e == null) return null;
+      var eInnerException = e.InnerException;
+      return e.InnerException is ObjectHelperException ? eInnerException : GetHelperException(eInnerException);
     }
   }
 };
