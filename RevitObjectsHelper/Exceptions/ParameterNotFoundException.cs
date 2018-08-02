@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace RevitObjectsHelper.Exceptions
 {
-  public class ParameterNotFoundException : ObjectHelperException
-  {
-    public ParameterNotFoundException(string message) : base(message)
+    public class ParameterNotFoundException : ObjectHelperException
     {
+        public ParameterNotFoundException(string message) : base(message)
+        {
+        }
     }
-  }
 }

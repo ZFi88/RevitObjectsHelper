@@ -7,14 +7,14 @@ using Autodesk.Revit.DB;
 
 namespace RevitObjectsHelper.Attributes
 {
-  [AttributeUsage(AttributeTargets.Property)]
-  public class BuiltInParameterAttribute : Attribute
-  {
-    public BuiltInParameter Parameter { get; set; }
-
-    public BuiltInParameterAttribute(BuiltInParameter parameter)
+    [AttributeUsage(AttributeTargets.Property)]
+    public class BuiltInParameterAttribute : Attribute
     {
-      Parameter = parameter;
+        public BuiltInParameter Parameter { get; set; }
+
+        public BuiltInParameterAttribute(BuiltInParameter parameter)
+        {
+            Parameter = parameter;
+        }
     }
-  }
 }

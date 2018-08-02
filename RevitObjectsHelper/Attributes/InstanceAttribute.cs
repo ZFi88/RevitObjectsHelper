@@ -2,8 +2,8 @@
 
 namespace RevitObjectsHelper.Attributes
 {
-  [AttributeUsage(AttributeTargets.Class)]
-  public class InstanceAttribute:Attribute
-  {
-  }
+    [AttributeUsage(AttributeTargets.Class)]
+    public class InstanceAttribute : Attribute
+    {
+    }
 }

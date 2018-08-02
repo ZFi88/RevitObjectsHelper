@@ -2,14 +2,14 @@
 
 namespace RevitObjectsHelper.Attributes
 {
-  [AttributeUsage(AttributeTargets.Class)]
-  public class ClassAttribute : Attribute
-  {
-    public Type Type { get; set; }
-
-    public ClassAttribute(Type type)
+    [AttributeUsage(AttributeTargets.Class)]
+    public class ClassAttribute : Attribute
     {
-      Type = type;
+        public Type Type { get; set; }
+
+        public ClassAttribute(Type type)
+        {
+            Type = type;
+        }
     }
-  }
 }
