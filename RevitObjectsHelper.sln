@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitObjectsHelper", "RevitObjectsHelper\RevitObjectsHelper.csproj", "{FA2D43EC-72FA-4AFE-994E-876B0220492E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RevitObjectHelper.Tests", "RevitObjectHelper.Tests\RevitObjectHelper.Tests.csproj", "{77F94E67-8FC9-4A15-8485-4649CA7B8783}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{9F6B67BA-8136-4DB1-84FD-8BF2F5EF719D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9F6B67BA-8136-4DB1-84FD-8BF2F5EF719D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9F6B67BA-8136-4DB1-84FD-8BF2F5EF719D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77F94E67-8FC9-4A15-8485-4649CA7B8783}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F94E67-8FC9-4A15-8485-4649CA7B8783}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F94E67-8FC9-4A15-8485-4649CA7B8783}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F94E67-8FC9-4A15-8485-4649CA7B8783}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
