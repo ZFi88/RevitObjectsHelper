@@ -196,7 +196,7 @@ namespace RevitObjectsHelper.Core
             var catAttributes = GetType().GetCustomAttributes(typeof(CategoryAttribute), false);
             var classAttributes = GetType().GetCustomAttributes(typeof(ClassAttribute), false);
             if (catAttributes.Length == 0 && classAttributes.Length == 0)
-                throw new NoClassficationException("Don't set Class or Category attribute");
+                throw new NoClassficationException("Not set Class or Category attribute");
 
             if (catAttributes.Length > 0)
             {
@@ -220,9 +220,9 @@ namespace RevitObjectsHelper.Core
             var instAttributes = GetType().GetCustomAttributes(typeof(InstanceAttribute), false);
             var symbolAttributes = GetType().GetCustomAttributes(typeof(SymbolAttribute), false);
             if (instAttributes.Length == 0 && symbolAttributes.Length == 0)
-                throw new SymbolOrInstanceException("Don't set instance or symbol attribute");
+                throw new SymbolOrInstanceException("Not set instance or symbol attribute");
             if (instAttributes.Length != 0 && symbolAttributes.Length != 0)
-                throw new SymbolOrInstanceException("Setted instance and symbol attributes");
+                throw new SymbolOrInstanceException("Instance and symbol attributes are set");
             if (instAttributes.Length > 0) return true;
             return false;
         }
