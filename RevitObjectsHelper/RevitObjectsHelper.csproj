@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\BuiltInParameterAttribute.cs" />
     <Compile Include="Attributes\CategoryAttribute.cs" />
     <Compile Include="Attributes\ClassAttribute.cs" />
     <Compile Include="Attributes\ElementIdAttribute.cs" />
@@ -62,8 +63,10 @@
     <Compile Include="Core\DbObjectSet.cs" />
     <Compile Include="Exceptions\ClassificationException.cs" />
     <Compile Include="Exceptions\NoClassficationException.cs" />
+    <Compile Include="Exceptions\ObjectHelperException.cs" />
     <Compile Include="Exceptions\ParameterNotFoundException.cs" />
     <Compile Include="Exceptions\SymbolOrInstanceException.cs" />
+    <Compile Include="Extensions\ElementExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Revit\RevitEvent.cs" />
   </ItemGroup>

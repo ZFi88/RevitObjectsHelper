@@ -3,6 +3,7 @@ using System.Reflection;
 using Autodesk.Revit.DB;
 using RevitObjectsHelper.Attributes;
 using RevitObjectsHelper.Exceptions;
+using RevitObjectsHelper.Extensions;
 using RevitObjectsHelper.Revit;
 
 namespace RevitObjectsHelper.Core
@@ -58,29 +59,50 @@ namespace RevitObjectsHelper.Core
       foreach (var info in GetType().GetProperties())
       {
         var parameterName = GetParameterName(info);
-        var parameter = RevitElement.LookupParameter(parameterName);
-        if (parameterName != null && parameter == null)
-          throw new ParameterNotFoundException($"No such parameter - \"{parameterName}\"");
-        if (info.PropertyType == typeof(bool))
+
+        if (parameterName == null) continue;
+
+        Parameter parameter = null;
+        switch (parameterName)
         {
-          info.SetValue(this, parameter.AsInteger() == 1);
+          case BuiltInParameter builtInParameter:
+            parameter = RevitElement.FindParameter(builtInParameter);
+            break;
+          case string pName:
+            parameter = RevitElement.FindParameter(pName);
+            break;
         }
-        else if (info.PropertyType == typeof(double))
-        {
-          info.SetValue(this, parameter.AsDouble());
-        }
-        else if (info.PropertyType == typeof(string))
-        {
-          info.SetValue(this, parameter.AsString());
-        }
-        else if (info.PropertyType == typeof(int) && IsElementId(info))
-        {
-          info.SetValue(this, parameter.AsElementId().IntegerValue);
-        }
-        else if (info.PropertyType == typeof(int))
-        {
-          info.SetValue(this, parameter.AsInteger());
-        }
+
+        SetProperty(info, parameter);
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="info">Property to set value</param>
+    /// <param name="parameter">Parameter from which to get value </param>
+    private void SetProperty(PropertyInfo info, Parameter parameter)
+    {
+      if (info.PropertyType == typeof(bool))
+      {
+        info.SetValue(this, parameter.AsInteger() == 1);
+      }
+      else if (info.PropertyType == typeof(double))
+      {
+        info.SetValue(this, parameter.AsDouble());
+      }
+      else if (info.PropertyType == typeof(string))
+      {
+        info.SetValue(this, parameter.AsString());
+      }
+      else if (info.PropertyType == typeof(int) && IsElementId(info))
+      {
+        info.SetValue(this, parameter.AsElementId().IntegerValue);
+      }
+      else if (info.PropertyType == typeof(int))
+      {
+        info.SetValue(this, parameter.AsInteger());
       }
     }
 
@@ -92,48 +114,64 @@ namespace RevitObjectsHelper.Core
       foreach (var info in GetType().GetProperties())
       {
         var parameterName = GetParameterName(info);
-        var parameter = RevitElement.LookupParameter(parameterName);
-        if (parameterName != null && parameter == null)
-          throw new ParameterNotFoundException($"No such parameter - \"{parameterName}\"");
-        try
+        if (parameterName == null) continue;
+
+        Parameter parameter = null;
+        switch (parameterName)
         {
-          if (info.PropertyType == typeof(bool))
-          {
-            parameter.Set((bool) info.GetValue(this) ? 1 : 0);
-          }
-          else if (info.PropertyType == typeof(double))
-          {
-            parameter.Set((double) info.GetValue(this));
-          }
-          else if (info.PropertyType == typeof(string))
-          {
-            parameter.Set((string) info.GetValue(this));
-          }
-          else if (info.PropertyType == typeof(int) && IsElementId(info))
-          {
-            var value = (int) info.GetValue(this);
-            if (value > 0) parameter.Set(new ElementId(value));
-          }
-          else if (info.PropertyType == typeof(int))
-          {
-            parameter.Set((int) info.GetValue(this));
-          }
+          case BuiltInParameter builtInParameter:
+            parameter = RevitElement.FindParameter(builtInParameter);
+            break;
+          case string pName:
+            parameter = RevitElement.FindParameter(pName);
+            break;
         }
-        catch
-        {
-        }
+
+        SetElementParameter(info, parameter);
       }
     }
 
     /// <summary>
-    /// Gets parameter name from 
+    /// Set Revit element parameter value
+    /// </summary>
+    /// <param name="info">Property from which to get value</param>
+    /// <param name="parameter">Parameter to set value</param>
+    private void SetElementParameter(PropertyInfo info, Parameter parameter)
+    {
+      if (info.PropertyType == typeof(bool))
+      {
+        parameter.Set((bool) info.GetValue(this) ? 1 : 0);
+      }
+      else if (info.PropertyType == typeof(double))
+      {
+        parameter.Set((double) info.GetValue(this));
+      }
+      else if (info.PropertyType == typeof(string))
+      {
+        parameter.Set((string) info.GetValue(this));
+      }
+      else if (info.PropertyType == typeof(int) && IsElementId(info))
+      {
+        var value = (int) info.GetValue(this);
+        if (value > 0) parameter.Set(new ElementId(value));
+      }
+      else if (info.PropertyType == typeof(int))
+      {
+        parameter.Set((int) info.GetValue(this));
+      }
+    }
+
+    /// <summary>
+    /// Gets parameter name from property
     /// </summary>
     /// <param name="prop"></param>
     /// <returns></returns>
-    private string GetParameterName(PropertyInfo prop)
+    private object GetParameterName(PropertyInfo prop)
     {
       var attributes = prop?.GetCustomAttributes(typeof(ParameterNameAttribute), false);
       if (attributes.Length > 0) return ((ParameterNameAttribute) attributes[0])?.Name;
+      attributes = prop?.GetCustomAttributes(typeof(BuiltInParameterAttribute), false);
+      if (attributes.Length > 0) return ((BuiltInParameterAttribute) attributes[0])?.Parameter;
       return null;
     }
 

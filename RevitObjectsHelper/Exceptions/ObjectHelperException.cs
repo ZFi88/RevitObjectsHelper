@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace RevitObjectsHelper.Exceptions
 {
-  public class ClassificationException : ObjectHelperException
+  public class ObjectHelperException : Exception
   {
-    public ClassificationException(string message) : base(message)
+    public ObjectHelperException(string message) : base(message)
     {
     }
   }
